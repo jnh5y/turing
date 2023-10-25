@@ -48,7 +48,7 @@ public class Condition {
         }
 
         public long countNumber(Integer numberToFind) {
-            return Set.of(blue, yellow, purple).stream().filter(i -> i.equals(numberToFind)).count();
+            return List.of(blue, yellow, purple).stream().filter(i -> i.equals(numberToFind)).count();
         }
     }
 
