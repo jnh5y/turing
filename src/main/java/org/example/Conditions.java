@@ -1,45 +1,22 @@
 package org.example;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 public class Conditions {
-    public Condition cond = new Condition(combination -> combination.purple > 3);
+    public static Condition cond = new Condition(combination -> combination.purple() > 3);
 
-    public class Condition {
-        public static List<Integer> ONE_TO_FIVE = List.of(1, 2, 3, 4, 5);
+    public static Condition cond2 = new Condition(combination -> combination.blue() == 1 &&
+            combination.yellow() == 4);
+    public static Condition cond3 = new Condition(c -> true);
 
-        public static List<Combination> allCombinations = Lists.cartesianProduct(ONE_TO_FIVE, ONE_TO_FIVE, ONE_TO_FIVE)
-                .stream()
-                .map( l -> new Combination(l.get(0), l.get(1), l.get(2))).sorted().collect(Collectors.toList());
+    public static Condition cond4 = new Condition(combination -> combination.blue() == 1 &&
+            combination.yellow() == 4 && combination.purple() == 3);
 
-        Function<Combination, Boolean> func;
+    public static Set<Condition.Combination> intersection(Condition cond1, Condition cond2) {
+        return Sets.intersection(cond1.getMatches(), cond2.getMatches());
 
-        public Condition(Function<Combination, Boolean> func) {
-            this.func = func;
-        }
-
-        public List<Combination> getMatches() {
-            return allCombinations.stream().filter(comb -> func.apply(comb)).toList();
-        }
-    }
-
-    public record Combination(Integer blue, Integer yellow, Integer purple) implements Comparable<Combination> {
-        @Override
-        public int compareTo(Combination o) {
-            if (this.blue.compareTo(o.blue) != 0) {
-                return this.blue.compareTo(o.blue);
-            }
-            if (this.yellow.compareTo(o.yellow) != 0) {
-                return this.yellow.compareTo(o.yellow);
-            }
-            if (this.purple.compareTo(o.purple) != 0) {
-                return this.purple.compareTo(o.purple);
-            }
-            return 0;
-        }
     }
 }
+
