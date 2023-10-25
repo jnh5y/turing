@@ -3,9 +3,7 @@ package org.example;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.example.Cards.*;
@@ -51,10 +49,6 @@ public class Main {
                                 System.out.println("Condition " + first + " contains " + second);
                             }
                         });
-
-
-
-                System.out.println();
             });
 
             /* Debugging
@@ -71,5 +65,22 @@ public class Main {
             System.out.println("Conditions with 1 solution: " + c);
         });
         System.out.println("There are " + conds.size() + " possible conditions which lead to unique solutions.");
+
+        int numCards = conds.get(0).size();
+
+        for (int i = 0; i < numCards; i++) {
+            int finalI = i;
+            Map<Condition, Integer> counts = new HashMap<>();
+            conds.stream().forEach(ls -> {
+                Condition cond = ls.get(finalI);
+                if (counts.containsKey(cond)) {
+                    counts.put(cond, counts.get(cond) + 1);
+                } else {
+                    counts.put(cond, 1);
+                }
+            });
+            System.out.println("For card " + i + " Counts: " + counts);
+        }
+
   }
 }
