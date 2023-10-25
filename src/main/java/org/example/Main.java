@@ -29,8 +29,31 @@ public class Main {
         // Game 12
         List<Condition>[] cards = new List[] {CARD_4, CARD_7, CARD_11, CARD_14, CARD_16};
 
+        List<List<Condition>> conds = getUniqueSolutions(cards, printContainment);
+        printCountsOfConditionsInSolutions(conds);
+    }
 
-        List<List<Condition>> conds = Lists.cartesianProduct(cards).stream().filter(l -> {
+    private static void printCountsOfConditionsInSolutions(List<List<Condition>> conds) {
+        System.out.println("\nThere are " + conds.size() + " possible conditions which lead to unique solutions.\n");
+
+        int numCards = conds.get(0).size();
+        for (int i = 0; i < numCards; i++) {
+            int finalI = i;
+            Map<Condition, Integer> counts = new HashMap<>();
+            conds.stream().forEach(ls -> {
+                Condition cond = ls.get(finalI);
+                if (counts.containsKey(cond)) {
+                    counts.put(cond, counts.get(cond) + 1);
+                } else {
+                    counts.put(cond, 1);
+                }
+            });
+            System.out.println("For card " + i + ": " + counts);
+        }
+    }
+
+    private static List<List<Condition>> getUniqueSolutions(List<Condition>[] cards, boolean printContainment) {
+        return Lists.cartesianProduct(cards).stream().filter(l -> {
             Optional<Set<Condition.Combination>> combinations =
                     l.stream()
                             .map(Condition::getMatches)
@@ -57,24 +80,5 @@ public class Main {
 
             return combinations.filter(combinationSet -> combinationSet.size() == 1).isPresent();
         }).toList();
-
-        System.out.println("\nThere are " + conds.size() + " possible conditions which lead to unique solutions.\n");
-
-        int numCards = conds.get(0).size();
-
-        for (int i = 0; i < numCards; i++) {
-            int finalI = i;
-            Map<Condition, Integer> counts = new HashMap<>();
-            conds.stream().forEach(ls -> {
-                Condition cond = ls.get(finalI);
-                if (counts.containsKey(cond)) {
-                    counts.put(cond, counts.get(cond) + 1);
-                } else {
-                    counts.put(cond, 1);
-                }
-            });
-            System.out.println("For card " + i + ": " + counts);
-        }
-
-  }
+    }
 }
