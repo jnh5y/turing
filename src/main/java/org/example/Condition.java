@@ -16,7 +16,15 @@ public class Condition {
 
     Function<Combination, Boolean> func;
 
-    public Condition(Function<Combination, Boolean> func) {
+    String description;
+
+    @Override
+    public String toString() {
+        return "'" + description + '\'';
+    }
+
+    public Condition(String description, Function<Combination, Boolean> func) {
+        this.description = description;
         this.func = func;
     }
 
