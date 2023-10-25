@@ -5,6 +5,23 @@ import com.google.common.collect.Sets;
 import java.util.Set;
 
 public class Conditions {
+
+    public static Condition card4_cond1 = new Condition("Yellow < 4", c -> c.yellow() < 4);
+    public static Condition card4_cond2 = new Condition("Yellow = 4", c -> c.yellow() == 4);
+    public static Condition card4_cond3 = new Condition("Yellow > 4", c -> c.yellow() > 4);
+
+    public static Condition card9_cond1 = new Condition("Zero 3s", c -> c.countNumber(3) == 0L);
+    public static Condition card9_cond2 = new Condition("One 3", c -> c.countNumber(3) == 1L);
+    public static Condition card9_cond3 = new Condition("Two 3s", c -> c.countNumber(3) == 2L);
+
+    public static Condition card11_cond1 = new Condition("Blue < Yellow", c -> c.blue() < c.yellow());
+    public static Condition card11_cond2 = new Condition("Blue = Yellow", c -> c.blue() == c.yellow());
+    public static Condition card11_cond3 = new Condition("Blue > Yellow", c -> c.blue() > c.yellow());
+
+    public static Condition card14_cond1 = new Condition("Blue < Yellow & Purple", c -> c.blue() < c.yellow() && c.blue() < c.purple());
+    public static Condition card14_cond2 = new Condition("Yellow < Blue & Purple", c ->  c.yellow() < c.blue() && c.yellow() < c.purple());
+    public static Condition card14_cond3 = new Condition("Purple < Yellow & Blue", c -> c.purple() < c.yellow() && c.purple() < c.blue());
+
     public static Condition cond = new Condition("Purple > 3", combination -> combination.purple() > 3);
 
     public static Condition cond2 = new Condition("Blue = 1 and Yellow =4", combination -> combination.blue() == 1 &&

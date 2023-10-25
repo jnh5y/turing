@@ -46,6 +46,10 @@ public class Condition {
             }
             return 0;
         }
+
+        public long countNumber(Integer numberToFind) {
+            return Set.of(blue, yellow, purple).stream().filter(i -> i.equals(numberToFind)).count();
+        }
     }
 
 }
