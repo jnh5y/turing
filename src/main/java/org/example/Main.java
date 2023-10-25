@@ -27,7 +27,7 @@ public class Main {
         System.out.println("Combinations: " + Condition.allCombinations);
 
         // Game 12
-        List<Condition>[] cards = new List[] {CARD_4, CARD_7, CARD_11, CARD_14, CARD_16};
+        List<Condition>[] cards = new List[] {CARD_17, CARD_22, CARD_33, CARD_36, CARD_46};
 
         List<List<Condition>> conds = getUniqueSolutions(cards, printContainment);
         printCountsOfConditionsInSolutions(conds);
