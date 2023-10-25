@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.example.Cards.*;
+
 public class Main {
     public static void main(String[] args) {
 //        List<Condition> card4 = List.of(Conditions.card4_cond2); //List.of(Conditions.card4_cond1, Conditions.card4_cond2, Conditions.card4_cond3);
@@ -19,12 +21,18 @@ public class Main {
 //        Condition.allCombinations = Condition.allCombinations.stream()
 //                .filter(comb -> Conditions.card14_cond3.func.apply(comb)).collect(Collectors.toList());
 
-        List<Condition> card4 = List.of(Conditions.card4_cond1, Conditions.card4_cond2, Conditions.card4_cond3);
-        List<Condition> card9 = List.of(Conditions.card9_cond1, Conditions.card9_cond2, Conditions.card9_cond3);
-        List<Condition> card11 = List.of(Conditions.card11_cond1, Conditions.card11_cond2, Conditions.card11_cond3);
-        List<Condition> card14 = List.of(Conditions.card14_cond1, Conditions.card14_cond2, Conditions.card14_cond3);
+        // Game 1
+        // List<Condition>[] cards = new List[] {CARD_4, CARD_9, CARD_11, CARD_14};
 
-        List<List<Condition>> conds = Lists.cartesianProduct(card4, card9, card11, card14).stream().filter(l -> {
+        // Game 2
+        Condition.allCombinations = Condition.allCombinations.stream()
+                .filter(comb -> !Conditions.card10_cond4.func.apply(comb)).collect(Collectors.toList());
+
+        System.out.println("Number of combinations considered: " + Condition.allCombinations.size());
+        List<Condition>[] cards = new List[] {CARD_3, CARD_7, CARD_10, CARD_14};
+
+
+        List<List<Condition>> conds = Lists.cartesianProduct(cards).stream().filter(l -> {
             Optional<Set<Condition.Combination>> combinations =
                     l.stream()
                             .map(Condition::getMatches)
@@ -59,7 +67,7 @@ public class Main {
             return combinations.filter(combinationSet -> combinationSet.size() == 1).isPresent();
         }).toList();
 
-        conds.stream().forEach(c -> {
+        conds.forEach(c -> {
             System.out.println("Conditions with 1 solution: " + c);
         });
         System.out.println("There are " + conds.size() + " possible conditions which lead to unique solutions.");
