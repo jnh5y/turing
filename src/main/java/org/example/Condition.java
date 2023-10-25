@@ -32,6 +32,8 @@ public class Condition {
         return allCombinations.stream().filter(comb -> func.apply(comb)).collect(Collectors.toSet());
     }
 
+
+
     public record Combination(Integer blue, Integer yellow, Integer purple) implements Comparable<Combination> {
         @Override
         public int compareTo(Combination o) {
@@ -49,6 +51,10 @@ public class Condition {
 
         public long countNumber(Integer numberToFind) {
             return List.of(blue, yellow, purple).stream().filter(i -> i.equals(numberToFind)).count();
+        }
+
+        public Integer sum() {
+            return blue + yellow + purple;
         }
     }
 

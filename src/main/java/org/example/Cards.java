@@ -10,5 +10,7 @@ public class Cards {
     public static List<Condition> CARD_10 = List.of(Conditions.card10_cond1, Conditions.card10_cond2, Conditions.card10_cond3);
     public static List<Condition> CARD_11 = List.of(Conditions.card11_cond1, Conditions.card11_cond2, Conditions.card11_cond3);
     public static List<Condition> CARD_14 = List.of(Conditions.card14_cond1, Conditions.card14_cond2, Conditions.card14_cond3);
+    public static List<Condition> CARD_18 = List.of(Conditions.card18_cond1, Conditions.card18_cond2);
+    public static List<Condition> CARD_20 = List.of(Conditions.card20_cond1, Conditions.card20_cond2, Conditions.card20_cond3);
 
 }
