@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.example.Cards.*;
 
@@ -21,7 +22,7 @@ public class Main {
 
 
         boolean printContainment = false;
-        Condition.allCombinations = Condition.allCombinations.stream()
+        Condition.combinationsToAnalyze = Condition.allCombinations.stream()
 ////                .filter(comb -> !Conditions.card9_cond4.func.apply(comb))
 //                .filter((comb -> Conditions.card1_cond2.func.apply(comb)))
 //                .filter((comb -> Conditions.card7_cond1.func.apply(comb)))
@@ -37,19 +38,54 @@ public class Main {
 
         List<List<Condition>> conds = getUniqueSolutions(cards, printContainment);
 
-        printCountsOfConditionsInSolutions(conds);
+        List<Map<Condition, Integer>> listCounts = printCountsOfConditionsInSolutions(conds);
 
-        System.out.println("\nSolution counts: " + solnCounts);
+        // Sorting Counts and messing around.
+        List<Map<Condition, Integer>> sortedListCounts = listCounts.stream().sorted((o1, o2) -> {
+            if (o1.size() != o2.size()) {
+                return o2.size() - o1.size();
+            } else {
+                return o2.values().stream().max(Integer::compareTo).get()
+                        .compareTo(o1.values().stream().max(Integer::compareTo).get());
+            }
+        }).toList();
+        System.out.println("\n List of conditions sorted: ");
+        sortedListCounts.forEach(s -> {
+            List<Map.Entry<Condition, Integer>> stream = sortMap(s);
+            System.out.println(stream);
+        });
+
+        List<Condition> listOfConditions = sortedListCounts.stream().limit(3)
+                .map(s -> s.entrySet().stream()
+                        .sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
+                        .map(e -> e.getKey()).limit(1).toList().get(0)
+                ).toList();
+        getCombinations(listOfConditions).stream().forEach(combinations -> {
+            System.out.println("\n Conditions " + listOfConditions + " led to combinations " + combinations);
+        });
+
+        System.out.println("\nSolution counts: ");
+        solnCounts.forEach((s,i) -> System.out.println(s + ":" + i));
+
+        // Finding discriminating Conditions.
     }
 
-    private static void printCountsOfConditionsInSolutions(List<List<Condition>> conds) {
-        System.out.println("\nThere are " + conds.size() + " possible condition combinations which lead to a unique solution.\n");
+    private static List<Map.Entry<Condition, Integer>> sortMap(Map<Condition, Integer> s) {
+        List<Map.Entry<Condition, Integer>> stream = s.entrySet().stream().sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue())).toList();
+        return stream;
+    }
 
+    private static List<Map<Condition, Integer>> printCountsOfConditionsInSolutions(List<List<Condition>> conds) {
+        System.out.println("\nThere are " + conds.size() + " possible condition combinations which lead to a unique solution.\n");
         int numCards = conds.get(0).size();
+        List<Map<Condition, Integer>> listCounts = new ArrayList<>(5);
+
         for (int i = 0; i < numCards; i++) {
             Map<Condition, Integer> counts = getCountingMap(conds, i);
             System.out.println("For card " + i + ": " + counts);
+            listCounts.add(counts);
         }
+        return listCounts;
     }
 
     private static <T> Map<T, Integer> getCountingMap(List<List<T>> conds, int i) {
@@ -72,9 +108,7 @@ public class Main {
     private static List<List<Condition>> getUniqueSolutions(List<Condition>[] cards, boolean printContainment) {
         return Lists.cartesianProduct(cards).stream().filter(l -> {
             Optional<Set<Condition.Combination>> combinations =
-                    l.stream()
-                            .map(Condition::getMatches)
-                            .reduce(Sets::intersection);
+                    getCombinations(l);
 
             combinations.stream().filter(combs -> combs.size() == 1).forEach(combs -> {
                 System.out.println(l + " matches " + combs.stream().toList().get(0));
@@ -98,5 +132,11 @@ public class Main {
 
             return combinations.filter(combinationSet -> combinationSet.size() == 1).isPresent();
         }).toList();
+    }
+
+    private static Optional<Set<Condition.Combination>> getCombinations(List<Condition> l) {
+        return l.stream()
+                .map(Condition::getMatches)
+                .reduce(Sets::intersection);
     }
 }

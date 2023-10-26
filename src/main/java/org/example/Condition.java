@@ -15,6 +15,11 @@ public class Condition {
             .stream()
             .map(l -> new Combination(l.get(0), l.get(1), l.get(2))).sorted().collect(Collectors.toList());
 
+    public static List<Combination> combinationsToAnalyze = Lists.cartesianProduct(ONE_TO_FIVE, ONE_TO_FIVE, ONE_TO_FIVE)
+            .stream()
+            .map(l -> new Combination(l.get(0), l.get(1), l.get(2))).sorted().collect(Collectors.toList());
+
+
     Function<Combination, Boolean> func;
 
     String description;
@@ -30,7 +35,7 @@ public class Condition {
     }
 
     public Set<Combination> getMatches() {
-        return allCombinations.stream().filter(comb -> func.apply(comb)).collect(Collectors.toSet());
+        return combinationsToAnalyze.stream().filter(comb -> func.apply(comb)).collect(Collectors.toSet());
     }
 
     public record Combination(Integer blue, Integer yellow, Integer purple) implements Comparable<Combination> {
