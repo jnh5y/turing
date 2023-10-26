@@ -37,7 +37,7 @@ public class Main {
     }
 
     private static void printCountsOfConditionsInSolutions(List<List<Condition>> conds) {
-        System.out.println("\nThere are " + conds.size() + " possible conditions which lead to unique solutions.\n");
+        System.out.println("\nThere are " + conds.size() + " possible combinations of conditions which lead to a unique solution.\n");
 
         int numCards = conds.get(0).size();
         for (int i = 0; i < numCards; i++) {
