@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import static org.example.Cards.*;
 
 public class Main {
+    public static Map<Condition.Combination, Integer> solnCounts = new HashMap<>();
     public static void main(String[] args) {
         // Game 1
         // List<Condition>[] cards = new List[] {CARD_4, CARD_9, CARD_11, CARD_14};
@@ -17,12 +18,14 @@ public class Main {
         // Game 12
         // List<Condition>[] cards = new List[] {CARD_4, CARD_9, CARD_18, CARD_20};
 
+
+
         boolean printContainment = false;
         Condition.allCombinations = Condition.allCombinations.stream()
-//                .filter(comb -> !Conditions.card9_cond4.func.apply(comb))
-                .filter((comb -> Conditions.card1_cond2.func.apply(comb)))
-                .filter((comb -> Conditions.card7_cond1.func.apply(comb)))
-                .filter((comb -> Conditions.card27_cond3.func.apply(comb)))
+////                .filter(comb -> !Conditions.card9_cond4.func.apply(comb))
+//                .filter((comb -> Conditions.card1_cond2.func.apply(comb)))
+//                .filter((comb -> Conditions.card7_cond1.func.apply(comb)))
+//                .filter((comb -> Conditions.card27_cond3.func.apply(comb)))
                 .collect(Collectors.toList());
 
         System.out.println("Number of combinations considered: " + Condition.allCombinations.size());
@@ -33,25 +36,36 @@ public class Main {
         List<Condition>[] cards = new List[] {CARD_1, CARD_7, CARD_27, CARD_35, CARD_48};
 
         List<List<Condition>> conds = getUniqueSolutions(cards, printContainment);
+
         printCountsOfConditionsInSolutions(conds);
+
+        System.out.println("\nSolution counts: " + solnCounts);
     }
 
     private static void printCountsOfConditionsInSolutions(List<List<Condition>> conds) {
-        System.out.println("\nThere are " + conds.size() + " possible combinations of conditions which lead to a unique solution.\n");
+        System.out.println("\nThere are " + conds.size() + " possible condition combinations which lead to a unique solution.\n");
 
         int numCards = conds.get(0).size();
         for (int i = 0; i < numCards; i++) {
-            int finalI = i;
-            Map<Condition, Integer> counts = new HashMap<>();
-            conds.stream().forEach(ls -> {
-                Condition cond = ls.get(finalI);
-                if (counts.containsKey(cond)) {
-                    counts.put(cond, counts.get(cond) + 1);
-                } else {
-                    counts.put(cond, 1);
-                }
-            });
+            Map<Condition, Integer> counts = getCountingMap(conds, i);
             System.out.println("For card " + i + ": " + counts);
+        }
+    }
+
+    private static <T> Map<T, Integer> getCountingMap(List<List<T>> conds, int i) {
+        Map<T, Integer> counts = new HashMap<>();
+        conds.stream().forEach(ls -> {
+            T cond = ls.get(i);
+            updateCountingMap(counts, cond);
+        });
+        return counts;
+    }
+
+    private static <T> void updateCountingMap(Map<T, Integer> counts, T key) {
+        if (counts.containsKey(key)) {
+            counts.put(key, counts.get(key) + 1);
+        } else {
+            counts.put(key, 1);
         }
     }
 
@@ -64,6 +78,7 @@ public class Main {
 
             combinations.stream().filter(combs -> combs.size() == 1).forEach(combs -> {
                 System.out.println(l + " matches " + combs.stream().toList().get(0));
+                updateCountingMap(solnCounts, combs.stream().toList().get(0));
 
                 /* Attempt to implement non-superfluous condition.
                 // I'm not sure about it quite yet. */
