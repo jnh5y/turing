@@ -9,6 +9,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.google.common.collect.Sets.cartesianProduct;
 import static org.example.Cards.*;
 
 public class Main {
@@ -70,18 +71,31 @@ public class Main {
         solnCounts.forEach((s,i) -> System.out.println(s + ":" + i));
 
         // Finding discriminating Conditions.
-        System.out.println("\nDoing something with discrimination: ");
-        List<Condition> conditions = Arrays.stream(cards).toList().stream().flatMap(Collection::stream).toList();
+        System.out.println("\nDoing something with discrimination for 1 condition: ");
+        List<List<Condition>> listConditions =
+                Arrays.stream(cards).toList().stream().flatMap(Collection::stream).map(List::of).toList();
+        List<Map.Entry<List<Condition>, Map<BitSet, Integer>>> list = buildSortedDiscriminatingList(listConditions);
+        list.forEach(entry -> System.out.println(entry.getKey() + " : " + entry.getValue()));
 
+        // Finding discriminating Conditions.
+        System.out.println("\nDoing something with discrimination for 2 conditions: ");
+        // This is all the Sets of Pairs (Sets) of Cards (List<Conditions>)
+        Set<Set<List<Condition>>> combinationsOfCards = Sets.combinations(Set.of(cards), 2);
+        List<List<Condition>> conditionPairs = combinationsOfCards.stream().flatMap( set -> {
+            return Lists.cartesianProduct(set.stream().toList()).stream();
+        }).toList();
+        List<Map.Entry<List<Condition>, Map<BitSet, Integer>>> list2 = buildSortedDiscriminatingList(conditionPairs);
+        list2.forEach(entry -> System.out.println(entry.getKey() + " : " + entry.getValue()));
 
-        // Build condition count map
+    }
+
+    private static List<Map.Entry<List<Condition>, Map<BitSet, Integer>>> buildSortedDiscriminatingList(List<List<Condition>> listConditions) {
         Map<List<Condition>, Map<BitSet, Integer>> conditionCountMap = new HashMap<>();
-        conditions.forEach(condition -> {
-            List<Condition> conditionsToCheck = List.of(condition);
+        listConditions.forEach(conditionsToCheck -> {
             Map<BitSet, Integer> counts = new HashMap<>();
             solnCounts.keySet().forEach( soln -> {
                 for (int i = 0; i < conditionsToCheck.size(); i++) {
-                    Boolean result = condition.func.apply(soln);
+                    Boolean result = conditionsToCheck.get(i).func.apply(soln);
                     BitSet bitset = new BitSet(1);
                     bitset.set(i, result);
                     updateCountingMap(counts, bitset);
@@ -102,9 +116,7 @@ public class Main {
                 return o2.getValue().keySet().size() - o1.getValue().keySet().size();
             }
         });
-        list.forEach(entry -> {
-            System.out.println(entry.getKey() + " : " + entry.getValue());
-        });
+        return list;
     }
 
     private static List<Map.Entry<Condition, Integer>> sortMap(Map<Condition, Integer> s) {
