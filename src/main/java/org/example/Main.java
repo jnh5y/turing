@@ -67,7 +67,7 @@ public class Main {
             System.out.println("\n Conditions " + listOfConditions + " led to combinations " + combinations);
         });
 
-        System.out.println("\nSolution counts: ");
+        System.out.println("\nSolution counts for " + solnCounts.keySet().size() + " solutions : ");
         solnCounts.forEach((s,i) -> System.out.println(s + ":" + i));
 
         // Finding discriminating Conditions.
@@ -75,18 +75,33 @@ public class Main {
         List<List<Condition>> listConditions =
                 Arrays.stream(cards).toList().stream().flatMap(Collection::stream).map(List::of).toList();
         List<Map.Entry<List<Condition>, Map<BitSet, Integer>>> list = buildSortedDiscriminatingList(listConditions);
-        list.forEach(entry -> System.out.println(entry.getKey() + " : " + entry.getValue()));
+        list.stream().limit(5).forEach(entry -> System.out.println(entry.getKey() + " : " + entry.getValue()));
 
         // Finding discriminating Conditions.
         System.out.println("\nDoing something with discrimination for 2 conditions: ");
         // This is all the Sets of Pairs (Sets) of Cards (List<Conditions>)
         Set<Set<List<Condition>>> combinationsOfCards = Sets.combinations(Set.of(cards), 2);
-        List<List<Condition>> conditionPairs = combinationsOfCards.stream().flatMap( set -> {
-            return Lists.cartesianProduct(set.stream().toList()).stream();
-        }).toList();
+        List<List<Condition>> conditionPairs = combinationsOfCards.stream().flatMap( set -> Lists.cartesianProduct(set.stream().toList()).stream()).toList();
         List<Map.Entry<List<Condition>, Map<BitSet, Integer>>> list2 = buildSortedDiscriminatingList(conditionPairs);
-        list2.forEach(entry -> System.out.println(entry.getKey() + " : " + entry.getValue()));
+        list2.stream().limit(5).forEach(entry -> System.out.println(entry.getKey() + " : " + entry.getValue()));
 
+        // Finding discriminating Conditions.
+        System.out.println("\nDoing something with discrimination for 3 conditions: ");
+        // This is all the Sets of Triples (Sets) of Cards (List<Conditions>)
+        Set<Set<List<Condition>>> combinationsOf3Cards = Sets.combinations(Set.of(cards), 3);
+        List<List<Condition>> conditionTriples = combinationsOf3Cards.stream().flatMap( set -> Lists.cartesianProduct(set.stream().toList()).stream()).toList();
+        List<Map.Entry<List<Condition>, Map<BitSet, Integer>>> list3 = buildSortedDiscriminatingList(conditionTriples);
+        list3.stream().limit(5).forEach(entry -> System.out.println(entry.getKey() + " : " + entry.getValue()));
+
+        printTopExample(list, "single");
+        printTopExample(list2, "double");
+        printTopExample(list3, "triple");
+    }
+
+    private static void printTopExample(List<Map.Entry<List<Condition>, Map<BitSet, Integer>>> list, String word) {
+        List<Condition> topSingleCondition = list.get(0).getKey();
+        Condition.Combination combination = getCombinations(topSingleCondition).get().stream().toList().get(0);
+        System.out.println("To test top " + word + " combination use: " + combination);
     }
 
     private static List<Map.Entry<List<Condition>, Map<BitSet, Integer>>> buildSortedDiscriminatingList(List<List<Condition>> listConditions) {
@@ -94,12 +109,12 @@ public class Main {
         listConditions.forEach(conditionsToCheck -> {
             Map<BitSet, Integer> counts = new HashMap<>();
             solnCounts.keySet().forEach( soln -> {
+                BitSet bitset = new BitSet(conditionsToCheck.size());
                 for (int i = 0; i < conditionsToCheck.size(); i++) {
                     Boolean result = conditionsToCheck.get(i).func.apply(soln);
-                    BitSet bitset = new BitSet(1);
                     bitset.set(i, result);
-                    updateCountingMap(counts, bitset);
                 }
+                updateCountingMap(counts, bitset);
             });
             //System.out.println(condition + " : " + counts);
             conditionCountMap.put(conditionsToCheck, counts);
