@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,7 +34,7 @@ public class Main {
         System.out.println("Number of combinations considered: " + Condition.allCombinations.size());
         System.out.println("Combinations: " + Condition.allCombinations);
 
-        List<Condition> CARD_48 = List.of(Conditions.card48_cond4, Conditions.card48_cond8);
+        //List<Condition> CARD_48 = List.of(Conditions.card48_cond4, Conditions.card48_cond8);
 
         List<Condition>[] cards = new List[] {CARD_1, CARD_7, CARD_27, CARD_35, CARD_48};
 
@@ -68,6 +70,41 @@ public class Main {
         solnCounts.forEach((s,i) -> System.out.println(s + ":" + i));
 
         // Finding discriminating Conditions.
+        System.out.println("\nDoing something with discrimination: ");
+        List<Condition> conditions = Arrays.stream(cards).toList().stream().flatMap(Collection::stream).toList();
+
+
+        // Build condition count map
+        Map<List<Condition>, Map<BitSet, Integer>> conditionCountMap = new HashMap<>();
+        conditions.forEach(condition -> {
+            List<Condition> conditionsToCheck = List.of(condition);
+            Map<BitSet, Integer> counts = new HashMap<>();
+            solnCounts.keySet().forEach( soln -> {
+                for (int i = 0; i < conditionsToCheck.size(); i++) {
+                    Boolean result = condition.func.apply(soln);
+                    BitSet bitset = new BitSet(1);
+                    bitset.set(i, result);
+                    updateCountingMap(counts, bitset);
+                }
+            });
+            //System.out.println(condition + " : " + counts);
+            conditionCountMap.put(conditionsToCheck, counts);
+        });
+
+        List<Map.Entry<List<Condition>, Map<BitSet, Integer>>> list =
+                conditionCountMap.entrySet().stream().collect(Collectors.toList());
+
+        list.sort((o1, o2) -> {
+            if (o2.getValue().keySet().size() == o1.getValue().keySet().size()) {
+                return o1.getValue().values().stream().max(Integer::compareTo).get()
+                        .compareTo(o2.getValue().values().stream().max(Integer::compareTo).get());
+            } else {
+                return o2.getValue().keySet().size() - o1.getValue().keySet().size();
+            }
+        });
+        list.forEach(entry -> {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        });
     }
 
     private static List<Map.Entry<Condition, Integer>> sortMap(Map<Condition, Integer> s) {
