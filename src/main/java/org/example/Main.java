@@ -17,17 +17,20 @@ public class Main {
         // Game 12
         // List<Condition>[] cards = new List[] {CARD_4, CARD_9, CARD_18, CARD_20};
 
-        boolean printContainment = true;
+        boolean printContainment = false;
         Condition.allCombinations = Condition.allCombinations.stream()
 //                .filter(comb -> !Conditions.card9_cond4.func.apply(comb))
-//                .filter((comb -> Conditions.card14_cond3.func.apply(comb)))
+                .filter((comb -> Conditions.card1_cond2.func.apply(comb)))
+                .filter((comb -> Conditions.card7_cond1.func.apply(comb)))
+                .filter((comb -> Conditions.card27_cond3.func.apply(comb)))
                 .collect(Collectors.toList());
 
         System.out.println("Number of combinations considered: " + Condition.allCombinations.size());
         System.out.println("Combinations: " + Condition.allCombinations);
 
-        // Game 12
-        List<Condition>[] cards = new List[] {CARD_17, CARD_22, CARD_33, CARD_36, CARD_46};
+        List<Condition> CARD_48 = List.of(Conditions.card48_cond4, Conditions.card48_cond8);
+
+        List<Condition>[] cards = new List[] {CARD_1, CARD_7, CARD_27, CARD_35, CARD_48};
 
         List<List<Condition>> conds = getUniqueSolutions(cards, printContainment);
         printCountsOfConditionsInSolutions(conds);
