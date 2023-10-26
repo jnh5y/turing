@@ -26,18 +26,19 @@ public class Main {
 
         boolean printContainment = false;
         Condition.combinationsToAnalyze = Condition.allCombinations.stream()
-////                .filter(comb -> !Conditions.card9_cond4.func.apply(comb))
-//                .filter((comb -> Conditions.card1_cond2.func.apply(comb)))
-//                .filter((comb -> Conditions.card7_cond1.func.apply(comb)))
-//                .filter((comb -> Conditions.card27_cond3.func.apply(comb)))
+//                .filter(comb -> !Conditions.card6_cond2.func.apply(comb))
+//                .filter((comb -> Conditions.card11_cond2.func.apply(comb)))
+//                .filter((comb -> Conditions.card25_cond1.func.apply(comb)))
+//                .filter((comb -> Conditions.card5_cond1.func.apply(comb)))
                 .collect(Collectors.toList());
 
         System.out.println("Number of combinations considered: " + Condition.allCombinations.size());
         System.out.println("Combinations: " + Condition.allCombinations);
 
-        //List<Condition> CARD_48 = List.of(Conditions.card48_cond4, Conditions.card48_cond8);
+        List<Condition> CARD_43 = List.of(Conditions.card43_cond5, Conditions.card43_cond6);
 
-        List<Condition>[] cards = new List[] {CARD_1, CARD_7, CARD_27, CARD_35, CARD_48};
+
+        List<Condition>[] cards = new List[] {CARD_5, CARD_25, CARD_26, CARD_36, CARD_43};
 
         List<List<Condition>> conds = getUniqueSolutions(cards, printContainment);
 
@@ -100,8 +101,12 @@ public class Main {
 
     private static void printTopExample(List<Map.Entry<List<Condition>, Map<BitSet, Integer>>> list, String word) {
         List<Condition> topSingleCondition = list.get(0).getKey();
-        Condition.Combination combination = getCombinations(topSingleCondition).get().stream().toList().get(0);
-        System.out.println("To test top " + word + " combination use: " + combination);
+        List<Condition.Combination> combination = getCombinations(topSingleCondition).get().stream().toList();
+        if (combination.size() > 1) {
+            System.out.println("To test top " + word + " combination use: " + combination.get(0));
+        } else {
+            System.out.println("No valid combination which tests: " + topSingleCondition);
+        }
     }
 
     private static List<Map.Entry<List<Condition>, Map<BitSet, Integer>>> buildSortedDiscriminatingList(List<List<Condition>> listConditions) {

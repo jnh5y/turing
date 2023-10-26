@@ -71,6 +71,25 @@ public class Condition {
                     (yellow == purple && blue != yellow);
         }
 
+        public int largestSequence() {
+            if (blue + 1 == yellow) {
+                if (yellow + 1 == purple) {
+                    return 3;
+                }
+                return 2;
+            } else if (yellow + 1 == purple) {
+                return 2;
+            }
+            if (blue - 1 == yellow) {
+                if (yellow - 1 == purple) {
+                    return 3;
+                }
+                return 2;
+            } else if (yellow - 1 == purple) {
+                return 2;
+            }
+            return 1;
+        }
         public boolean ascendingOrder() {
             return blue < yellow && yellow < purple;
         }

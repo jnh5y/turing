@@ -9,6 +9,10 @@ public class Conditions {
     public static Condition card4_cond1 = new Condition("Yellow < 4", c -> c.yellow() < 4);
     public static Condition card4_cond2 = new Condition("Yellow = 4", c -> c.yellow() == 4);
     public static Condition card4_cond3 = new Condition("Yellow > 4", c -> c.yellow() > 4);
+    public static Condition card5_cond1 = new Condition("Blue is even", c -> c.blue() % 2 == 0);
+    public static Condition card5_cond2 = new Condition("Blue is odd", c -> c.blue() % 2 == 1);
+    public static Condition card6_cond1 = new Condition("Yellow is even", c -> c.yellow() % 2 == 0);
+    public static Condition card6_cond2 = new Condition("Yellow is odd", c -> c.yellow() % 2 == 1);
     public static Condition card7_cond1 = new Condition("Purple is even", c -> c.purple() % 2 == 0);
     public static Condition card7_cond2 = new Condition("Purple is odd", c -> c.purple() % 2 == 1);
     public static Condition card9_cond1 = new Condition("Zero 3s", c -> c.countNumber(3) == 0L);
@@ -41,6 +45,10 @@ public class Conditions {
 
     public static Condition card18_cond1 = new Condition("Sum is Even", c -> c.sum() % 2 == 0);
     public static Condition card18_cond2 = new Condition("Sum is Odd", c -> c.sum() % 2 == 1);
+    public static Condition card19_cond1 = new Condition("Blue + Yellow < 6", c -> c.blue() + c.yellow() < 6);
+    public static Condition card19_cond2 = new Condition("Blue + Yellow = 6", c -> c.blue() + c.yellow() == 6);
+    public static Condition card19_cond3 = new Condition("Blue + Yellow > 6", c -> c.blue() + c.yellow() > 6);
+
     public static Condition card20_cond1 = new Condition("Triple number", c -> c.blue() == c.yellow() && c.yellow() == c.purple());
     public static Condition card20_cond2 = new Condition("Double Number", c ->  (c.blue() == c.yellow() && c.yellow() != c.purple()) || (c.yellow() == c.purple() && c.blue() != c.yellow()));
     public static Condition card20_cond3 = new Condition("No repetition", c ->  c.blue() != c.yellow() && c.yellow() != c.purple());
@@ -50,6 +58,9 @@ public class Conditions {
     public static Condition card22_cond2 = new Condition("Descending order", c ->  c.descendingOrder());
     public static Condition card22_cond3 = new Condition("No order", c ->  !c.ascendingOrder() && !c.descendingOrder());
 
+    public static Condition card25_cond1 = new Condition("No Sequence in (as|des)cending ordering", c -> c.largestSequence() == 1);
+    public static Condition card25_cond2 = new Condition("Two Numbers in a sequence", c ->  c.largestSequence() == 2);
+    public static Condition card25_cond3 = new Condition("Three Numbers in a sequence", c -> c.largestSequence() == 3);
     public static Condition card26_cond1 = new Condition("Blue < 3", c -> c.blue() < 3);
     public static Condition card26_cond2 = new Condition("Yellow < 3", c -> c.yellow() < 3);
     public static Condition card26_cond3 = new Condition("Purple < 3", c -> c.purple() < 3);
@@ -73,6 +84,14 @@ public class Conditions {
     public static Condition card36_cond1 = new Condition("Sum = 3x", c -> c.sum() % 3 == 0);
     public static Condition card36_cond2 = new Condition("Sum = 4x", c -> c.sum() % 4 == 0);
     public static Condition card36_cond3 = new Condition("Sum = 5x", c -> c.sum() % 5 == 0);
+
+
+    public static Condition card43_cond1 = new Condition("Blue < Yellow", c -> c.blue() < c.yellow());
+    public static Condition card43_cond2 = new Condition("Blue < Purple", c -> c.blue() < c.purple());
+    public static Condition card43_cond3 = new Condition("Blue = Yellow", c -> c.blue() == c.yellow());
+    public static Condition card43_cond4 = new Condition("Blue = Purple", c -> c.blue() == c.purple());
+    public static Condition card43_cond5 = new Condition("Blue > Yellow", c -> c.blue() > c.yellow());
+    public static Condition card43_cond6 = new Condition("Blue > Purple", c -> c.blue() > c.purple());
 
     public static Condition card46_cond1 = new Condition("Zero 3s", c -> c.countNumber(3) == 0);
     public static Condition card46_cond2 = new Condition("Zero 4s", c -> c.countNumber(4) == 0);
