@@ -35,10 +35,7 @@ public class Main {
         System.out.println("Number of combinations considered: " + Condition.allCombinations.size());
         System.out.println("Combinations: " + Condition.allCombinations);
 
-        List<Condition> CARD_43 = List.of(Conditions.card43_cond5, Conditions.card43_cond6);
-
-
-        List<Condition>[] cards = new List[] {CARD_5, CARD_25, CARD_26, CARD_36, CARD_43};
+        List<Condition>[] cards = new List[] {CARD_1, CARD_6, CARD_10, CARD_14, CARD_18, CARD_19};
 
         List<List<Condition>> conds = getUniqueSolutions(cards, printContainment);
 
