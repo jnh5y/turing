@@ -33,7 +33,7 @@ public class Main {
 //                .filter((comb -> Conditions.card5_cond1.func.apply(comb)))
                 .collect(Collectors.toList());
 
-        System.out.println("All Combinations: " + Condition.allCombinations);
+        System.out.println("Considered Combinations: " + Condition.combinationsToAnalyze);
         System.out.println("Number of combinations considered: " + Condition.combinationsToAnalyze.size());
 
         List<Condition>[] cards = new List[] {CARD_2, CARD_10, CARD_15, CARD_16, CARD_20, CARD_22};
@@ -95,6 +95,21 @@ public class Main {
         printTopExample(list, "single");
         printTopExample(list2, "double");
         printTopExample(list3, "triple");
+
+        // Printing truth table.
+        List<Condition> cardConditions = Arrays.stream(cards).flatMap(Collection::stream).toList();
+        solnCounts.keySet().stream().map(soln -> {
+            String truthTable = cardConditions.stream().map(condition -> {
+                if(condition.func.apply(soln)) {
+                    return "T";
+                } else {
+                    return "F";
+                }
+            }).collect(Collectors.joining());
+
+            //System.out.println(soln + " has table: " + truthTable);
+            return "Table " + truthTable + " for " + soln;
+        }).sorted().forEach(System.out::println);
     }
 
     private static void printTopExample(List<Map.Entry<List<Condition>, Map<BitSet, Integer>>> list, String word) {
