@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Cards {
     public static List<Condition> CARD_1 = List.of(Conditions.card1_cond1, Conditions.card1_cond2);
+    public static List<Condition> CARD_2 = List.of(Conditions.card2_cond1, Conditions.card2_cond2, Conditions.card2_cond3);
     public static List<Condition> CARD_3 = List.of(Conditions.card3_cond1, Conditions.card3_cond2, Conditions.card3_cond3);
     public static List<Condition> CARD_4 = List.of(Conditions.card4_cond1, Conditions.card4_cond2, Conditions.card4_cond3);
     public static List<Condition> CARD_5 = List.of(Conditions.card5_cond1, Conditions.card5_cond2);
@@ -12,6 +13,8 @@ public class Cards {
     public static List<Condition> CARD_9 = List.of(Conditions.card9_cond1, Conditions.card9_cond2, Conditions.card9_cond3);
     public static List<Condition> CARD_10 = List.of(Conditions.card10_cond1, Conditions.card10_cond2, Conditions.card10_cond3);
     public static List<Condition> CARD_11 = List.of(Conditions.card11_cond1, Conditions.card11_cond2, Conditions.card11_cond3);
+    public static List<Condition> CARD_12 = List.of(Conditions.card12_cond1, Conditions.card12_cond2, Conditions.card12_cond3);
+
     public static List<Condition> CARD_13 = List.of(Conditions.card13_cond1, Conditions.card13_cond2, Conditions.card13_cond3);
     public static List<Condition> CARD_14 = List.of(Conditions.card14_cond1, Conditions.card14_cond2, Conditions.card14_cond3);
     public static List<Condition> CARD_15 = List.of(Conditions.card15_cond1, Conditions.card15_cond2, Conditions.card15_cond3);

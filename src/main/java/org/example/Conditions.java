@@ -3,6 +3,10 @@ package org.example;
 public class Conditions {
     public static Condition card1_cond1 = new Condition("Blue = 1", c -> c.blue() == 1);
     public static Condition card1_cond2 = new Condition("Blue > 1", c -> c.blue() > 1);
+    public static Condition card2_cond1 = new Condition("Blue < 3", c -> c.blue() < 3);
+    public static Condition card2_cond2 = new Condition("Blue = 3", c -> c.blue() == 3);
+    public static Condition card2_cond3 = new Condition("Blue > 3", c -> c.blue() > 3);
+
     public static Condition card3_cond1 = new Condition("Yellow < 3", c -> c.yellow() < 3);
     public static Condition card3_cond2 = new Condition("Yellow = 3", c -> c.yellow() == 3);
     public static Condition card3_cond3 = new Condition("Yellow > 3", c -> c.yellow() > 3);
@@ -26,6 +30,10 @@ public class Conditions {
     public static Condition card11_cond1 = new Condition("Blue < Yellow", c -> c.blue() < c.yellow());
     public static Condition card11_cond2 = new Condition("Blue = Yellow", c -> c.blue() == c.yellow());
     public static Condition card11_cond3 = new Condition("Blue > Yellow", c -> c.blue() > c.yellow());
+    public static Condition card12_cond1 = new Condition("Blue < Purple", c -> c.blue() < c.purple());
+    public static Condition card12_cond2 = new Condition("Blue = Purple", c -> c.blue() == c.purple());
+    public static Condition card12_cond3 = new Condition("Blue > Purple", c -> c.blue() > c.purple());
+
     public static Condition card13_cond1 = new Condition("Yellow < Purple", c -> c.yellow() < c.purple());
     public static Condition card13_cond2 = new Condition("Yellow = Purple", c -> c.yellow() == c.purple());
     public static Condition card13_cond3 = new Condition("Yellow > Purple", c -> c.yellow() > c.purple());

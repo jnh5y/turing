@@ -24,18 +24,19 @@ public class Main {
 
 
 
-        boolean printContainment = false;
+        boolean printContainment = true;
         Condition.combinationsToAnalyze = Condition.allCombinations.stream()
-//                .filter(comb -> !Conditions.card6_cond2.func.apply(comb))
-//                .filter((comb -> Conditions.card11_cond2.func.apply(comb)))
-//                .filter((comb -> Conditions.card25_cond1.func.apply(comb)))
+                .filter(comb -> Conditions.card20_cond3.func.apply(comb))
+                .filter((comb -> !Conditions.card10_cond3.func.apply(comb)))
+                .filter((comb -> !Conditions.card10_cond4.func.apply(comb)))
+                .filter((comb -> Conditions.card22_cond3.func.apply(comb)))
 //                .filter((comb -> Conditions.card5_cond1.func.apply(comb)))
                 .collect(Collectors.toList());
 
-        System.out.println("Number of combinations considered: " + Condition.allCombinations.size());
-        System.out.println("Combinations: " + Condition.allCombinations);
+        System.out.println("All Combinations: " + Condition.allCombinations);
+        System.out.println("Number of combinations considered: " + Condition.combinationsToAnalyze.size());
 
-        List<Condition>[] cards = new List[] {CARD_1, CARD_6, CARD_10, CARD_14, CARD_18, CARD_19};
+        List<Condition>[] cards = new List[] {CARD_2, CARD_10, CARD_15, CARD_16, CARD_20, CARD_22};
 
         List<List<Condition>> conds = getUniqueSolutions(cards, printContainment);
 
