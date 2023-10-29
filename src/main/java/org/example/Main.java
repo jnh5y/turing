@@ -36,26 +36,22 @@ public class Main {
         System.out.println("Considered Combinations: " + Condition.combinationsToAnalyze);
         System.out.println("Number of combinations considered: " + Condition.combinationsToAnalyze.size());
 
-        List<Condition>[] cards = new List[] {CARD_1, CARD_6, CARD_10, CARD_14, CARD_18, CARD_19};
+        //List<Condition>[] cards = new List[] {CARD_1, CARD_6, CARD_10, CARD_14, CARD_18, CARD_19};
+        //B5WQUZ
+        // List<Condition>[] cards = new List[] {CARD_4, CARD_5, CARD_12, CARD_15, CARD_19};
+        // B632KG9
+        List<Condition>[] cards = new List[] {CARD_2, CARD_10, CARD_15, CARD_16, CARD_20, CARD_22};
+
 
         List<List<Condition>> conds = getUniqueSolutions(cards, printContainment);
 
-        // Checking for support
-        List<List<Condition>> condsWithOutSupport = new ArrayList<>();
-        conds.forEach(conditions -> {
-            conditions.forEach(cond -> {
-                List<Condition> smaller = conditions.stream().filter(c -> !c.equals(cond)).toList();
-                Optional<Set<Condition.Combination>> combs = getCombinations(smaller);
-                if (combs.isPresent() && combs.get().size() == 1) {
-                    System.out.println(smaller + " provides a unique solution, so " + conditions + " can be removed.");
-                    condsWithOutSupport.add(conditions);
-                }
-            });
+        // Build counts.
+        conds.forEach(l -> {
+            Optional<Set<Condition.Combination>> combs = getCombinations(l);
+            if (combs.isPresent()) {
+                updateCountingMap(solnCounts, combs.get().stream().toList().get(0));
+            }
         });
-        conds = conds.stream().filter(c -> !condsWithOutSupport.contains(c)).toList();
-
-        // End checking for support
-
 
         List<Map<Condition, Integer>> listCounts = printCountsOfConditionsInSolutions(conds);
 
@@ -205,34 +201,46 @@ public class Main {
     }
 
     private static List<List<Condition>> getUniqueSolutions(List<Condition>[] cards, boolean printContainment) {
-        return Lists.cartesianProduct(cards).stream().filter(l -> {
+        List<List<Condition>> condsWithOutSupport = new ArrayList<>();
+        return Lists.cartesianProduct(cards).stream().filter(conditions -> {
             Optional<Set<Condition.Combination>> combinations =
-                    getCombinations(l);
+                    getCombinations(conditions);
 
             combinations.stream().filter(combs -> combs.size() == 1).forEach(combs -> {
-                System.out.println(l + " matches " + combs.stream().toList().get(0));
+                System.out.println(conditions + " matches " + combs.stream().toList().get(0));
 
+                // Checking for support
 
-                updateCountingMap(solnCounts, combs.stream().toList().get(0));
+                    conditions.forEach(cond -> {
+                        List<Condition> smaller = conditions.stream().filter(c -> !c.equals(cond)).toList();
+                        Optional<Set<Condition.Combination>> smallerCombs = getCombinations(smaller);
+                        if (smallerCombs.isPresent() && smallerCombs.get().size() == 1) {
+                            System.out.println(smaller + " provides a unique solution, so " + conditions + " can be removed.");
+                            condsWithOutSupport.add(conditions);
+                        } else {
+//                            updateCountingMap(solnCounts, combs.stream().toList().get(0));
 
-                /* Attempt to implement non-superfluous condition.
-                // I'm not sure about it quite yet. */
-                if (printContainment) {
-                    Lists.cartesianProduct(l, l).stream()
-                            .filter(ls -> ls.get(0) != ls.get(1))
-                            .forEach(ls -> {
-                                Condition first = ls.get(0);
-                                Condition second = ls.get(1);
-                                //System.out.println("Analyzing " + first + " : " + second);
-                                if (first.getMatches().containsAll(second.getMatches())) {
-                                    System.out.println("Condition " + first + " contains " + second);
-                                }
-                            });
-                }
+                            /* Attempt to implement non-superfluous condition.
+                            // I'm not sure about it quite yet. */
+                            if (printContainment) {
+                                Lists.cartesianProduct(conditions, conditions).stream()
+                                        .filter(ls -> ls.get(0) != ls.get(1))
+                                        .forEach(ls -> {
+                                            Condition first = ls.get(0);
+                                            Condition second = ls.get(1);
+                                            //System.out.println("Analyzing " + first + " : " + second);
+                                            if (first.getMatches().containsAll(second.getMatches())) {
+                                                System.out.println("Condition " + first + " contains " + second);
+                                            }
+                                        });
+                            }
+                        }
+                    });
+
             });
 
             return combinations.filter(combinationSet -> combinationSet.size() == 1).isPresent();
-        }).toList();
+        }).filter(l -> !condsWithOutSupport.contains(l)).toList();
     }
 
     private static Optional<Set<Condition.Combination>> getCombinations(List<Condition> l) {
