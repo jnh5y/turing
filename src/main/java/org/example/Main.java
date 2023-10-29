@@ -26,19 +26,36 @@ public class Main {
 
         boolean printContainment = true;
         Condition.combinationsToAnalyze = Condition.allCombinations.stream()
-                .filter(comb -> Conditions.card20_cond3.func.apply(comb))
-                .filter((comb -> !Conditions.card10_cond3.func.apply(comb)))
-                .filter((comb -> !Conditions.card10_cond4.func.apply(comb)))
-                .filter((comb -> Conditions.card22_cond3.func.apply(comb)))
+//                .filter(comb -> Conditions.card20_cond3.func.apply(comb))
+//                .filter((comb -> !Conditions.card10_cond3.func.apply(comb)))
+//                .filter((comb -> !Conditions.card10_cond4.func.apply(comb)))
+//                .filter((comb -> Conditions.card22_cond3.func.apply(comb)))
 //                .filter((comb -> Conditions.card5_cond1.func.apply(comb)))
                 .collect(Collectors.toList());
 
         System.out.println("Considered Combinations: " + Condition.combinationsToAnalyze);
         System.out.println("Number of combinations considered: " + Condition.combinationsToAnalyze.size());
 
-        List<Condition>[] cards = new List[] {CARD_2, CARD_10, CARD_15, CARD_16, CARD_20, CARD_22};
+        List<Condition>[] cards = new List[] {CARD_1, CARD_6, CARD_10, CARD_14, CARD_18, CARD_19};
 
         List<List<Condition>> conds = getUniqueSolutions(cards, printContainment);
+
+        // Checking for support
+        List<List<Condition>> condsWithOutSupport = new ArrayList<>();
+        conds.forEach(conditions -> {
+            conditions.forEach(cond -> {
+                List<Condition> smaller = conditions.stream().filter(c -> !c.equals(cond)).toList();
+                Optional<Set<Condition.Combination>> combs = getCombinations(smaller);
+                if (combs.isPresent() && combs.get().size() == 1) {
+                    System.out.println(smaller + " provides a unique solution, so " + conditions + " can be removed.");
+                    condsWithOutSupport.add(conditions);
+                }
+            });
+        });
+        conds = conds.stream().filter(c -> !condsWithOutSupport.contains(c)).toList();
+
+        // End checking for support
+
 
         List<Map<Condition, Integer>> listCounts = printCountsOfConditionsInSolutions(conds);
 
@@ -194,6 +211,8 @@ public class Main {
 
             combinations.stream().filter(combs -> combs.size() == 1).forEach(combs -> {
                 System.out.println(l + " matches " + combs.stream().toList().get(0));
+
+
                 updateCountingMap(solnCounts, combs.stream().toList().get(0));
 
                 /* Attempt to implement non-superfluous condition.
